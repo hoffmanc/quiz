@@ -1,0 +1,11 @@
+%h1= title
+%form{ method: 'post' }
+  %div
+    %div
+      %span Title :
+      %input{ type: 'text', name: 'title', id: 'editQuizTitle' }
+    %div
+      %span Body :
+      %textarea{ name: 'body', rows: 20, id: 'editQuizBody' }
+    %div#editQuizSubmit
+      %input{ type: 'submit', value: 'Send' }

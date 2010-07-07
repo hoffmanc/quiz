@@ -3,19 +3,19 @@ var Db= require('mongodb/db').Db,
     Server= require('mongodb/connection').Server,
     sys= require('sys');
 
-ArticleProvider = function(host, port) {
+QuizProvider = function(host, port) {
   this.db= new Db('node-mongo-blog', new Server(host, port, {auto_reconnect: true}, {}));
   this.db.open(function(){});
 };
 
-ArticleProvider.prototype.getCollection= function(callback) {
+QuizProvider.prototype.getCollection= function(callback) {
   this.db.collection('articles', function(error, article_collection) {
     if( error ) callback(error);
     else callback(null, article_collection);
   });
 };
 
-ArticleProvider.prototype.findAll = function(callback) {
+QuizProvider.prototype.findAll = function(callback) {
     this.getCollection(function(error, article_collection) {
       if( error ) callback(error)
       else {
@@ -32,7 +32,7 @@ ArticleProvider.prototype.findAll = function(callback) {
     });
 };
 
-ArticleProvider.prototype.findById = function(id, callback) {
+QuizProvider.prototype.findById = function(id, callback) {
     this.getCollection(function(error, article_collection) {
       if( error ) callback(error)
       else {
@@ -44,7 +44,7 @@ ArticleProvider.prototype.findById = function(id, callback) {
     });
 };
 
-ArticleProvider.prototype.save = function(articles, callback) {
+QuizProvider.prototype.save = function(articles, callback) {
     this.getCollection(function(error, article_collection) {
       if( error ) callback(error)
       else {
@@ -67,7 +67,7 @@ ArticleProvider.prototype.save = function(articles, callback) {
     });
 };
 
-ArticleProvider.prototype.addCommentToArticle = function(articleId, comment, callback) {
+QuizProvider.prototype.addCommentToArticle = function(articleId, comment, callback) {
   this.getCollection(function(error, article_collection) {
     if( error ) callback( error );
     else {
@@ -82,5 +82,4 @@ ArticleProvider.prototype.addCommentToArticle = function(articleId, comment, cal
   });
 };
 
-
-exports.ArticleProvider = ArticleProvider;
+exports.QuizProvider = QuizProvider;

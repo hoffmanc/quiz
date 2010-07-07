@@ -4,7 +4,7 @@ kiwi.seed('mongodb-native');
 var sys = require('sys');
 require('express/plugins');
 
-var ArticleProvider= require('./articleprovider-mongodb').ArticleProvider;
+var QuizProvider= require('./quizprovider-mongodb').QuizProvider;
 
 configure(function(){
   use(MethodOverride);
@@ -13,16 +13,16 @@ configure(function(){
   set('root', __dirname);
 })
 
-var articleProvider= new ArticleProvider('localhost', 27017);
+var quizProvider= new QuizProvider('localhost', 27017);
 
 //root
 get('/', function(){
   var self = this;
-  articleProvider.findAll(function(error, docs){
-    self.render('blogs_index.html.haml', {
+  quizProvider.findAll(function(error, quizes){
+    self.render('quizes_index.html.haml', {
       locals: {
-        title: 'Blog',
-        articles: docs
+        title: 'Quiz',
+        quizes: quizes
       }
     });
   })
@@ -33,18 +33,18 @@ get('/*.css', function(file){
   this.render(file + '.css.sass', { layout: false });
 });
 
-//blog
-get('/blog/new', function(){
-  this.render('blog_new.html.haml', {
+//quiz
+get('/quiz/new', function(){
+  this.render('quiz_new.html.haml', {
     locals: {
-      title: 'New Post'
+      title: 'New Quiz'
     }
   });
 });
 
-post('/blog/new', function(){
+post('/quiz/new', function(){
   var self = this;
-  articleProvider.save({
+  quizProvider.save({
     title: this.param('title'),
     body: this.param('body')
   }, function(error, docs) {
@@ -52,31 +52,31 @@ post('/blog/new', function(){
   });
 });
 
-get('/blog/*', function(id){
+get('/quiz/*', function(id){
   var self = this;
-  articleProvider.findById(id, function(error, article) {
+  quizProvider.findById(id, function(error, quiz) {
     if(error){ 
       var a = 'apple';
       debugger;
     } else {
-      self.render('blog_show.html.haml', {
+      self.render('quiz_show.html.haml', {
         locals: {
-          title: article.title,
-          article: article
+          title: quiz.title,
+          quiz: quiz
         }
       });
     }
   });
 });
 
-post('/blog/addComment', function() {
+post('/quiz/addComment', function() {
   var self = this;
-  articleProvider.addCommentToArticle(this.param('_id'), {
+  quizProvider.addCommentToArticle(this.param('_id'), {
     person: self.param('person'),
     comment: self.param('comment'),
     created_at: new Date()
   }, function(error, docs) {
-    self.redirect('/blog/' + self.param('_id'))
+    self.redirect('/quiz/' + self.param('_id'))
   });
 });
 

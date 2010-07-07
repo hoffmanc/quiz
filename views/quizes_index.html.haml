@@ -1,0 +1,9 @@
+%h1= title
+#quizes
+  - each quiz in quizes
+    %div.quiz
+      %div.created_at= quiz.created_at
+      %div.title
+        %a{href:"/quiz/"+quiz._id.toHexString()}= quiz.title
+      %div.body= quiz.body
+%a{href:"/quiz/new"}= "New Quiz"
