@@ -17,9 +17,8 @@ var newQuizProvider = function(){
     findByID: function(id, callback){
       client.get('quiz:' + id, function(err, quiz) {
         if(err){
-          throw new Error(err);
+          callback(err);
         } else {
-          quiz = JSON.parse(quiz);
           callback(null, quiz);
         }
       });

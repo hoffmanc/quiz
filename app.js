@@ -29,10 +29,14 @@ get('/', function() {
 get('/quiz/*', function(id) {
   var self = this;
   quizProvider.findByID(id, function(err, quizResult){
+    if(err){
+      self.contentType('text/plain');
+      return err;
+    }
     self.render('quiz-show.html.haml', {
       locals: {
         title: 'Latest Quiz',
-        quiz: quizResult
+        quiz: JSON.parse(quizResult)
       }
     });
   })
