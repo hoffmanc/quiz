@@ -1,6 +1,7 @@
 var sys = require('sys'),
   kiwi = require('kiwi'),
   client = kiwi.require("redis-client").createClient();
+client.select(2);
 
 var newQuizProvider = function(){
   return {
@@ -14,14 +15,13 @@ var newQuizProvider = function(){
       });
     },
     findByID: function(id, callback){
-      client.set('quiz:' + id + ':publishOn', new Date(), function(err, quiz){
-        client.get('quiz:' + id, function(err, quiz) {
-          if(err){
-            callback(err);
-          } else {
-            callback(null, quiz);
-          }
-        });
+      client.get('quiz:' + id, function(err, quiz) {
+        if(err){
+          throw new Error(err);
+        } else {
+          quiz = JSON.parse(quiz);
+          callback(null, quiz);
+        }
       });
     }
   }

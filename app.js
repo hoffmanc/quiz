@@ -1,4 +1,5 @@
-var kiwi= require('kiwi')
+var kiwi= require('kiwi'),
+  sys = require('sys');
 kiwi.require('express');
 kiwi.seed('redis-client');
 
@@ -14,31 +15,31 @@ configure(function(){
 
 
 get('/', function() {
-    var self = this;
-    quizProvider.findLatest(function(err, quizResult){
-        self.render('quiz-show.html.haml', {
-            locals: {
-                title: 'Latest Quiz',
-                quiz: quizResult
-            }
-        });
-    })
+  var self = this;
+  quizProvider.findLatest(function(err, quizResult){
+    self.render('quiz-show.html.haml', {
+      locals: {
+        title: 'Latest Quiz',
+        quiz: quizResult
+      }
+    });
+  })
 });
 
-get('/quiz/*', function() {
-    var self = this;
-    quizProvider.findByID(1, function(err, quizResult){
-        self.render('quiz-show.html.haml', {
-            locals: {
-                title: 'Latest Quiz',
-                quiz: quizResult
-            }
-        });
-    })
+get('/quiz/*', function(id) {
+  var self = this;
+  quizProvider.findByID(id, function(err, quizResult){
+    self.render('quiz-show.html.haml', {
+      locals: {
+        title: 'Latest Quiz',
+        quiz: quizResult
+      }
+    });
+  })
 });
 
 get('/*.css', function(file) {
-    this.render(file + '.css.sass', { layout: false });
+  this.render(file + '.css.sass', { layout: false });
 });
 
 run();
