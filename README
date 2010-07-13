@@ -1,1 +1,5 @@
-I'm thinking this will be a couchdb implementation, but stay tuned.
+simple quiz framework using:
+
+* node-js
+* node-redis-client
+* express-js
