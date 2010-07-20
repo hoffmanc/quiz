@@ -69,11 +69,11 @@ get('/quiz/*', function(id){
   });
 });
 
-post('/quiz/addComment', function() {
+post('/quiz/addSubmission', function() {
   var self = this;
-  quizProvider.addCommentToArticle(this.param('_id'), {
+  quizProvider.addSubmissionToArticle(this.param('_id'), {
     person: self.param('person'),
-    comment: self.param('comment'),
+    text: self.param('text'),
     created_at: new Date()
   }, function(error, docs) {
     self.redirect('/quiz/' + self.param('_id'))

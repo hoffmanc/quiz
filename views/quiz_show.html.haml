@@ -3,18 +3,18 @@
   %div.created_at= quiz.created_at
   %div.title= quiz.title
   %div.body= quiz.body
-  - each comment in quiz.comments
-    %div.comment
-      %div.person= comment.person
-      %div.comment= comment.comment
+  - each submission in quiz.submissions
+    %div.submission
+      %div.person= submission.person
+      %div.submission= submission.text
   %div
-    %form{ method: 'post', action:"/quiz/addComment" }
+    %form{ method: 'post', action:"/quiz/addSubmission" }
       %input{ type: "hidden", name:"_id", value: quiz._id.toHexString()}
       %div
         %span Author :
-        %input{ type: 'text', name: 'person', id: 'addCommentPerson' }
+        %input{ type: 'text', name: 'person', id: 'addSubmissionPerson' }
       %div
-        %span Comment :
-        %textarea{ name: 'comment', rows: 5, id: 'addCommentComment' }
+        %span Submission :
+        %textarea{ name: 'text', rows: 5, id: 'addSubmissionText' }
       %div#editQuizSubmit
         %input{ type: 'submit', value: 'Send' }
