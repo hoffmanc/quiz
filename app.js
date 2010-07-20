@@ -1,10 +1,10 @@
 var kiwi= require('kiwi'),
   sys = require('sys');
 kiwi.require('express');
-kiwi.seed('redis-client');
-
+kiwi.seed('mongodb-native');
 require('express/plugins');
-var quizProvider = require('./quiz-provider-redis').newQuizProvider();
+
+var quizProvider = require('./quizprovider-mongodb').newQuizProvider();
 
 configure(function(){
   use(MethodOverride);
@@ -12,7 +12,6 @@ configure(function(){
   use(Logger);
   set('root', __dirname);
 })
-
 
 get('/', function() {
   var self = this;
@@ -27,6 +26,22 @@ get('/', function() {
 });
 
 get('/quiz/*', function(id) {
+  var self = this;
+  quizProvider.findByID(id, function(err, quizResult){
+    if(err){
+      self.contentType('text/plain');
+      return err;
+    }
+    self.render('quiz-show.html.haml', {
+      locals: {
+        title: 'Latest Quiz',
+        quiz: JSON.parse(quizResult)
+      }
+    });
+  })
+});
+
+post('/quiz/new' function(id) {
   var self = this;
   quizProvider.findByID(id, function(err, quizResult){
     if(err){
