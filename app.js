@@ -35,26 +35,31 @@ get('/quiz/*', function(id) {
     self.render('quiz-show.html.haml', {
       locals: {
         title: 'Latest Quiz',
-        quiz: JSON.parse(quizResult)
+        quiz: quizResult
       }
     });
   })
 });
 
-post('/quiz/new' function(id) {
+post('/quiz/new', function(id) {
   var self = this;
-  quizProvider.findByID(id, function(err, quizResult){
-    if(err){
+  quizProvider.save({
+    name: self.param('name'),
+    publishOn: new Date(self.param('publishOn'))
+  }, function(err, result){
+    if(err) 
       self.contentType('text/plain');
       return err;
+    } else {
+      self.render('quiz-show.html.haml', {
+        locals: {
+          title: 'Quiz',
+          quiz: result
+        }
+      });
     }
-    self.render('quiz-show.html.haml', {
-      locals: {
-        title: 'Latest Quiz',
-        quiz: JSON.parse(quizResult)
-      }
-    });
-  })
+  }
+  );
 });
 
 get('/*.css', function(file) {
