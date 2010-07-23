@@ -25,6 +25,39 @@ get('/', function() {
   })
 });
 
+get('/quiz/new', function(){
+  this.render('quiz-show.html.haml', {
+    locals: {
+      title: 'New Quiz',
+      quiz: { 
+        name: 'New Quiz', 
+        publishOn: (new Date()).toString()
+      }
+    }
+  });
+});
+
+post('/quiz/new', function(id) {
+  var self = this;
+  quizProvider.save({
+    name: self.param('name'),
+    publishOn: new Date(self.param('publishOn'))
+  }, function(err, result){
+    if(err) {
+      self.contentType('text/plain');
+      return err;
+    } else {
+      self.render('quiz-show.html.haml', {
+        locals: {
+          title: 'Quiz',
+          quiz: result
+        }
+      });
+    }
+  }
+  );
+});
+
 get('/quiz/*', function(id) {
   var self = this;
   quizProvider.findByID(id, function(err, quizResult){
@@ -41,29 +74,26 @@ get('/quiz/*', function(id) {
   })
 });
 
-post('/quiz/new', function(id) {
+get('/quiz', function() {
   var self = this;
-  quizProvider.save({
-    name: self.param('name'),
-    publishOn: new Date(self.param('publishOn'))
-  }, function(err, result){
-    if(err) 
+  quizProvider.findByID(id, function(err, quizResult){
+    if(err){
       self.contentType('text/plain');
       return err;
-    } else {
-      self.render('quiz-show.html.haml', {
-        locals: {
-          title: 'Quiz',
-          quiz: result
-        }
-      });
     }
-  }
-  );
+    self.render('quiz-show.html.haml', {
+      locals: {
+        title: 'Latest Quiz',
+        quiz: quizResult
+      }
+    });
+  })
 });
 
 get('/*.css', function(file) {
-  this.render(file + '.css.sass', { layout: false });
+  sys.puts('.sass');
+  sys.puts(file + '.sass');
+  this.render(file + '.sass', { layout: false });
 });
 
 run();

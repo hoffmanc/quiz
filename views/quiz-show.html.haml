@@ -1,11 +1,15 @@
 %h1= title
 %div.quiz
-  %dl
-    %dt
-      %label{:for => 'name'}= 'Quiz Name'
-    %dd
-      %input#name{:name => 'name', :value => quiz.name, :type = 'text'}
-    %dt
-      %label{:for => 'publishOn'}= 'Publish On'
-    %dd
-      %input#publishOn{:name => 'publishOn', :value => quiz.name, :type = 'text'}
+  %form{action:"/quiz/new",method:"POST"}
+    %dl
+      %dt
+        %label{"for":"name"} 
+          Quiz Name
+      %dd
+        %input#name{name:"name",value:quiz.name,type:"text"}
+      %dt
+        %label{"for":"publishOn"}
+          Publish On
+      %dd
+        %input#publishOn{name:"publishOn",value:quiz.publishOn,type:"text"}
+      %input#submit{type:"submit",value:"Create"}

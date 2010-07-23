@@ -11,46 +11,45 @@ var newQuizProvider = function newQuizProvider(host, port) {
   db= new Db('node-mongo-quiz', new Server(host, port, {auto_reconnect: true}, {}));
   db.open(function(){});
 
-  var getCollection = function(callback) {
-    db.collection('quizes', function(error, quiz_collection) {
-      if( error ) callback(error);
-      else callback(null, quiz_collection);
+  var getCollection = function(cbk) {
+    db.collection('quizes', function(e, quiz_collection) {
+      if( e ) cbk(e);
+      else cbk(null, quiz_collection);
     });
   };
 
   return {
-    'findLatest': function(callback) {
-      getCollection(function(error, quiz_collection) {
-        if( error ) callback(error)
+    'findLatest': function(cbk) {
+      getCollection(function(e, quiz_collection) {
+        if( e ) cbk(e)
         else {
-          quiz_collection.find({}, { 'sort': 'createdAt', 'limit': 1 }, 
-            function(error, cursor) {
-              if( error ) callback(error)
+          quiz_collection.find({}, { 'sort': '-createdAt', 'limit': 1 }, 
+            function(e, cursor) {
+              if( e ) cbk(e)
               else {
-                cursor.toArray(function(error, quiz_collection) {
-                  if( error ) callback(error)
-                  else callback(null, quiz_collection[0])
-                  }
+                cursor.toArray(function(e, quiz_collection) {
+                  if( e ) cbk(e)
+                  else cbk(null, quiz_collection[0])
                 });
               }
           });
         }
       });
     },
-    'findByID': function(id, callback) {
-      getCollection(function(error, quiz_collection) {
-        if( error ) callback(error)
+    'findByID': function(id, cbk) {
+      getCollection(function(e, quiz_collection) {
+        if( e ) cbk(e)
         else {
-          quiz_collection.find({_id: new mongo.ObjectID(id)}, function(error, result) {
-            if( error ) callback(error)
-            else callback(null, result[0])
+          quiz_collection.find({_id: new mongo.ObjectID(id)}, function(e, result) {
+            if( e ) cbk(e)
+            else cbk(null, result[0])
           });
         }
       });
     },
-    'save': function(quizes, callback) {
-      getCollection(function(error, quiz_collection) {
-        if( error ) callback(error)
+    'save': function(quizes, cbk) {
+      getCollection(function(e, quiz_collection) {
+        if( e ) cbk(e)
         else {
           if( typeof(quizes.length)=="undefined")
             quizes = [quizes];
@@ -63,21 +62,21 @@ var newQuizProvider = function newQuizProvider(host, port) {
             }
           }
           quiz_collection.insert(quizes, function() {
-            callback(null, quizes);
+            cbk(null, quizes);
           });
         }
       });
     },
-    'addSubmissionToArticle': function(quizID, submission, callback) {
-      getCollection(function(error, quiz_collection) {
-        if( error ) callback( error );
+    'addSubmissionToArticle': function(quizID, submission, cbk) {
+      getCollection(function(e, quiz_collection) {
+        if( e ) cbk( e );
         else {
           quiz_collection.update(
             {_id: mongo.ObjectID(quizID)},
             {"$push": {submissions: submission}},
-            function(error, quiz){
-              if( error ) callback(error);
-              else callback(null, quiz)
+            function(e, quiz){
+              if( e ) cbk(e);
+              else cbk(null, quiz)
             });
         }
       });
