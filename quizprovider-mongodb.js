@@ -36,11 +36,11 @@ var newQuizProvider = function newQuizProvider(host, port) {
         }
       });
     },
-    'findByID': function(id, cbk) {
+    'findByName': function(name, cbk) {
       getCollection(function(e, quiz_collection) {
         if( e ) cbk(e)
         else {
-          quiz_collection.find({_id: new mongo.ObjectID(id)}, function(e, result) {
+          quiz_collection.find({"name": name}, function(e, result) {
             if( e ) cbk(e)
             else cbk(null, result[0])
           });
@@ -67,7 +67,7 @@ var newQuizProvider = function newQuizProvider(host, port) {
         }
       });
     },
-    'addSubmissionToArticle': function(quizID, submission, cbk) {
+    'addSubmissionToQuiz': function(quizID, submission, cbk) {
       getCollection(function(e, quiz_collection) {
         if( e ) cbk( e );
         else {

@@ -1,15 +1,10 @@
 %h1= title
 %div.quiz
-  %form{action:"/quiz/new",method:"POST"}
-    %dl
-      %dt
-        %label{"for":"name"} 
-          Quiz Name
-      %dd
-        %input#name{name:"name",value:quiz.name,type:"text"}
-      %dt
-        %label{"for":"publishOn"}
-          Publish On
-      %dd
-        %input#publishOn{name:"publishOn",value:quiz.publishOn,type:"text"}
-      %input#submit{type:"submit",value:"Create"}
+  %h1#name{name:"name",value:quiz.name,type:"text"}
+    =quiz.name
+  %a#editQuiz{href:"/quiz/edit/" + slug(quiz.name)}
+    (Edit)
+  %div#quizBody
+    =quiz.text
+  %div#publishOn{name:"publishOn",value:quiz.publishOn,type:"text"}
+    =quiz.publishOn
